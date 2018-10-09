@@ -1,2 +1,2 @@
 # address-lookup
-Address lookup
+Address lookup is a CMS agnostic module.
