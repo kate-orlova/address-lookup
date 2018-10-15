@@ -1,9 +1,6 @@
 ﻿{
   "ProviderId": "Microsoft.VisualStudio.ConnectedService.Wcf",
   "Version": "15.0.20119.1312",
-  "GettingStartedDocument": {
-    "Uri": "https://go.microsoft.com/fwlink/?linkid=858517"
-  },
   "ExtendedData": {
     "Uri": "http://ws.afd.co.uk/PCE_WebService.asmx",
     "Namespace": "PostcodeEverywhere",
