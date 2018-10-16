@@ -1,6 +1,7 @@
 ﻿using LocationService.Interfaces;
 using PostcodeEverywhere;
 using System;
+using System.Collections.Specialized;
 using Address = LocationService.Business_Entities.Address;
 
 namespace LocationService.Services
@@ -13,6 +14,17 @@ namespace LocationService.Services
         private readonly string _property;
         private readonly string _countyType;
 
+        public UKAddressProvider(NameValueCollection settings)
+        {
+            _serialNumber = settings["serialNumber"];
+            _password = settings["password"];
+            _userId = settings["userId"];
+            _property = settings["property"];
+            _countyType = settings["countyType"];
+
+            //TODO create an address parser instance
+
+        }
 
         private AddressResultsList GetAddresssLIst(string postCode)
         {
