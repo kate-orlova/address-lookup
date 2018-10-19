@@ -13,6 +13,7 @@ namespace LocationService.Services
         private readonly string _userId;
         private readonly string _property;
         private readonly string _countyType;
+        private readonly UKAddressProviderParser _ukAddressProviderParser;
 
 
         public UKAddressProvider(NameValueCollection settings)
@@ -24,6 +25,8 @@ namespace LocationService.Services
             _countyType = settings["countyType"];
 
             AddressParser = new UKAddressParser();
+            _ukAddressProviderParser = UKAddressProviderParser.Instance;
+
         }
 
         private AddressResultsList GetAddresssLIst(string postCode)
