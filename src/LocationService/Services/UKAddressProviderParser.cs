@@ -1,4 +1,6 @@
-﻿namespace LocationService.Services
+﻿using LocationService.Business_Entities;
+
+namespace LocationService.Services
 {
     public class UKAddressProviderParser
     {
@@ -25,6 +27,12 @@
                 }
                 return _ukAddressProviderParser;
             }
+        }
+        public Address GetAddressData(string[] addresses)
+        {
+            var address = new Address();
+            return address;
+
         }
     }
 }

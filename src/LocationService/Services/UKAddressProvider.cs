@@ -29,7 +29,7 @@ namespace LocationService.Services
 
         }
 
-        private AddressResultsList GetAddresssLIst(string postCode)
+        private AddressResultsList GetAddresssList(string postCode)
         {
             AddressResultsList addressResultsList;
             if (!string.IsNullOrEmpty(postCode))
@@ -60,9 +60,17 @@ namespace LocationService.Services
             return addressResultsList;
         }
 
-        public Address AddressLookup(string strPostcode)
+        public Address AddressLookup(string postCode)
         {
-            throw new NotImplementedException();
+            AddressResultsList addressResultsList = GetAddresssList(postCode);
+            if (addressResultsList.intTotalRecordsFound == 1
+                && (addressResultsList.lstAddresses[0].StartsWith("Error: ")
+                    || addressResultsList.lstAddresses[0].StartsWith("Not Authenticated")
+                ))
+            {
+                return new Address { ErrorMessage = addressResultsList.lstAddresses[0], PostCode = postCode };
+            }
+            return _ukAddressProviderParser.GetAddressData(addressResultsList.lstAddresses);
         }
 
         public IAddressParser AddressParser { get; set; }
