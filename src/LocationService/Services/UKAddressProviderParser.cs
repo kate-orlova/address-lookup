@@ -1,4 +1,5 @@
-﻿using LocationService.Business_Entities;
+﻿using System.Linq;
+using LocationService.Business_Entities;
 
 namespace LocationService.Services
 {
@@ -6,6 +7,7 @@ namespace LocationService.Services
     {
         private static UKAddressProviderParser _ukAddressProviderParser = new UKAddressProviderParser();
         private static object _locker = new object();
+        private static char[] _separators = new[] { ' ', ',' };
 
         private UKAddressProviderParser()
         {
@@ -33,6 +35,13 @@ namespace LocationService.Services
             var address = new Address();
             return address;
 
+        }
+
+        private string GetCounty(string address)
+        {
+            var addressLastItem = address.Split(',').Last().Trim(_separators);
+            var hasCounty = Counties.Names.Any(e => e == addressLastItem);
+            return hasCounty ? addressLastItem : string.Empty;
         }
     }
 }
