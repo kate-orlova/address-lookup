@@ -43,5 +43,11 @@ namespace LocationService.Services
             var hasCounty = Counties.Names.Any(e => e == addressLastItem);
             return hasCounty ? addressLastItem : string.Empty;
         }
+
+        private string GetTown(string address, bool hasCountry)
+        {
+            var substrings = address.Split(',');
+            return substrings.Take(substrings.Length - (hasCountry ? 1 : 0)).Last().Trim(_separators);
+        }
     }
 }
