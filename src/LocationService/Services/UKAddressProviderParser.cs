@@ -37,6 +37,22 @@ namespace LocationService.Services
 
         }
 
+
+        private string[] CleanAddresses(string[] addresses, Address address)
+        {
+            var postCodeLengthLine = addresses[0].IndexOf('\t') + 1;
+            var hasCounty = !string.IsNullOrEmpty(address.County);
+            for (int i = 0; i < addresses.Length; i++)
+            {
+                if (hasCounty)
+                {
+                    addresses[i] = addresses[i].Remove(addresses[i].LastIndexOf(address.County, System.StringComparison.Ordinal)).Trim(_separators);
+                }
+                addresses[i] = addresses[i].Remove(addresses[i].LastIndexOf(address.Town, System.StringComparison.Ordinal)).Remove(0, postCodeLengthLine).Trim(_separators);
+            }
+            return addresses;
+        }
+
         private string GetCounty(string address)
         {
             var addressLastItem = address.Split(',').Last().Trim(_separators);
