@@ -49,5 +49,39 @@ namespace LocationService.Services
             var substrings = address.Split(',');
             return substrings.Take(substrings.Length - (hasCountry ? 1 : 0)).Last().Trim(_separators);
         }
+
+        private string[] GetHouseNumbers(string[] addressArray)
+        {
+            if (addressArray.Length > 1)
+            {
+                var houseNumbersSplits = addressArray.Select(e => e.Split(' ')).ToArray();
+
+                var countLastRemovesubLeftString = 0;
+
+                var minCount = houseNumbersSplits.Min(e => e.Length) - 1;
+
+                while (addressArray.Length > 1 && countLastRemovesubLeftString < minCount &&
+                       houseNumbersSplits.All(
+                           e =>
+                               e[e.Length - 1 - countLastRemovesubLeftString] ==
+                               houseNumbersSplits[0][houseNumbersSplits[0].Length - 1 - countLastRemovesubLeftString])
+                )
+                {
+                    countLastRemovesubLeftString++;
+                }
+                var generalResultHousesNumber =
+                    houseNumbersSplits.Select(
+                            e =>
+                                string.Join(" ", e.Take(e.Length - countLastRemovesubLeftString).ToArray()).Trim(_separators))
+                        .ToArray();
+                return generalResultHousesNumber;
+            }
+            var singleResultSeprate = addressArray[0].Split(' ');
+            var sinigleResult = string.Join(",", singleResultSeprate.Take(
+                singleResultSeprate.Length -
+                (singleResultSeprate.Length > 2 ? 2 : (singleResultSeprate.Length == 2 ? 1 : 0))
+            ).ToArray());
+            return new[] { sinigleResult };
+        }
     }
 }
