@@ -99,5 +99,20 @@ namespace LocationService.Services
             ).ToArray());
             return new[] { sinigleResult };
         }
+
+        private void SetAddressLines(Address address, string addressData)
+        {
+            var addressLines = addressData.Split(',');
+            if (addressLines.Length > 1)
+            {
+                address.AddressLine2 = addressLines.Last().Trim(',', ' ');
+                addressData = addressData.Remove(addressData.LastIndexOf(address.AddressLine2, System.StringComparison.Ordinal)).Trim(_separators);
+            }
+            else
+            {
+                address.AddressLine2 = string.Empty;
+            }
+            address.AddressLine1 = addressData;
+        }
     }
 }
