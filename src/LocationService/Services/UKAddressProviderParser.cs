@@ -7,7 +7,7 @@ namespace LocationService.Services
     {
         private static UKAddressProviderParser _ukAddressProviderParser = new UKAddressProviderParser();
         private static object _locker = new object();
-        private static char[] _separators = new[] { ' ', ',' };
+        private static char[] _separators = new[] {' ', ','};
 
         private UKAddressProviderParser()
         {
@@ -27,14 +27,24 @@ namespace LocationService.Services
                         }
                     }
                 }
+
                 return _ukAddressProviderParser;
             }
         }
+
         public Address GetAddressData(string[] addresses)
         {
-            var address = new Address();
+            var address = new Address
+            {
+                PostCode = addresses.First().Split('\t').First().Trim(),
+                County = GetCounty(addresses[0])
+            };
+            address.Town = GetTown(addresses[0], !string.IsNullOrEmpty(address.County));
+            addresses = CleanAddresses(addresses, address);
+            address.HouseNumbers = GetHouseNumbers(addresses);
+            SetAddressLines(address, addresses[0].Remove(0, address.HouseNumbers[0].Length).Trim(_separators));
+            address.HouseNumbers = address.HouseNumbers.OrderBy(e => e).ToArray();
             return address;
-
         }
 
 
@@ -46,10 +56,16 @@ namespace LocationService.Services
             {
                 if (hasCounty)
                 {
-                    addresses[i] = addresses[i].Remove(addresses[i].LastIndexOf(address.County, System.StringComparison.Ordinal)).Trim(_separators);
+                    addresses[i] = addresses[i]
+                        .Remove(addresses[i].LastIndexOf(address.County, System.StringComparison.Ordinal))
+                        .Trim(_separators);
                 }
-                addresses[i] = addresses[i].Remove(addresses[i].LastIndexOf(address.Town, System.StringComparison.Ordinal)).Remove(0, postCodeLengthLine).Trim(_separators);
+
+                addresses[i] = addresses[i]
+                    .Remove(addresses[i].LastIndexOf(address.Town, System.StringComparison.Ordinal))
+                    .Remove(0, postCodeLengthLine).Trim(_separators);
             }
+
             return addresses;
         }
 
@@ -85,19 +101,22 @@ namespace LocationService.Services
                 {
                     countLastRemovesubLeftString++;
                 }
+
                 var generalResultHousesNumber =
                     houseNumbersSplits.Select(
                             e =>
-                                string.Join(" ", e.Take(e.Length - countLastRemovesubLeftString).ToArray()).Trim(_separators))
+                                string.Join(" ", e.Take(e.Length - countLastRemovesubLeftString).ToArray())
+                                    .Trim(_separators))
                         .ToArray();
                 return generalResultHousesNumber;
             }
+
             var singleResultSeprate = addressArray[0].Split(' ');
             var sinigleResult = string.Join(",", singleResultSeprate.Take(
                 singleResultSeprate.Length -
                 (singleResultSeprate.Length > 2 ? 2 : (singleResultSeprate.Length == 2 ? 1 : 0))
             ).ToArray());
-            return new[] { sinigleResult };
+            return new[] {sinigleResult};
         }
 
         private void SetAddressLines(Address address, string addressData)
@@ -106,12 +125,15 @@ namespace LocationService.Services
             if (addressLines.Length > 1)
             {
                 address.AddressLine2 = addressLines.Last().Trim(',', ' ');
-                addressData = addressData.Remove(addressData.LastIndexOf(address.AddressLine2, System.StringComparison.Ordinal)).Trim(_separators);
+                addressData = addressData
+                    .Remove(addressData.LastIndexOf(address.AddressLine2, System.StringComparison.Ordinal))
+                    .Trim(_separators);
             }
             else
             {
                 address.AddressLine2 = string.Empty;
             }
+
             address.AddressLine1 = addressData;
         }
     }
