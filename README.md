@@ -1,3 +1,6 @@
+[![GitHub license](https://img.shields.io/github/license/kate-orlova/address-lookup.svg)](https://github.com/kate-orlova/address-lookup/blob/master/LICENSE)
+![GitHub top language](https://img.shields.io/github/languages/top/kate-orlova/address-lookup.svg?style=flat)
+
 # Address Lookup
 Address lookup is a CMS agnostic service based on [Postcode Everywhere API](http://ws.afd.co.uk/) provided by [AFD Software](https://www.afd.co.uk/).
 Solution is organised into the following folders:
