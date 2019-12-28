@@ -1,3 +1,4 @@
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/kate-orlova/address-lookup)
 [![GitHub license](https://img.shields.io/github/license/kate-orlova/address-lookup.svg)](https://github.com/kate-orlova/address-lookup/blob/master/LICENSE)
 ![GitHub language count](https://img.shields.io/github/languages/count/kate-orlova/address-lookup.svg?style=flat)
 ![GitHub top language](https://img.shields.io/github/languages/top/kate-orlova/address-lookup.svg?style=flat)
